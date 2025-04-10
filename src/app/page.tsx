@@ -1,6 +1,28 @@
+"use client";
+
 import Image from "next/image";
 
+import { useEffect, useState } from "react";
+
+import Controller from "@/http/Controller";
+
+const controller = new Controller();
+
 export default function Home() {
+  const [data, setData] = useState({});
+
+  useEffect(() => {
+    controller
+      .AcordosLeniencia()
+      .then(({ retorno }) => {
+        setData(retorno);
+      })
+      .catch((error) => {
+        console.log(error);
+        setData(error);
+      });
+  }, []);
+
   return (
     <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
       <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
@@ -24,6 +46,8 @@ export default function Home() {
             Save and see your changes instantly.
           </li>
         </ol>
+
+        <p>{JSON.stringify(data)}</p>
 
         <div className="flex gap-4 items-center flex-col sm:flex-row">
           <a
